@@ -1,6 +1,7 @@
-import React from 'react'
+import React, {useState} from 'react'
 import Head from 'next/head'
 import Image from 'next/image'
+import Filters from './Filters'
 import fonts from '../../styles/Fonts.module.css'
 import asianIcon from '../../assets/food-icons/asian-icon.svg'
 import breakfastIcon from '../../assets/food-icons/breakfast-icon.svg'
@@ -20,15 +21,15 @@ import veganIcon from '../../assets/food-icons/vegan-icon.svg'
 
 export default function Navigation() {
 
-		const foodIcons = [asianIcon, breakfastIcon, burgerIcon, dessertIcon, fastfoodIcon, healthyIcon, iceCreamIcon, indianIcon, italianIcon, koreanIcon, pizzaIcon, seafoodIcon, sushiIcon, veganIcon]
-		const foods = ['Asian', 'Breakfast', 'Burger', 'Dessert', 'Fast Food', 'Healthy', 'Ice Cream', 'Indian', 'Italian', 'Korean', 'Pizza', 'Seafood', 'Sushi', 'Vegan']
+		const foods = [{icon: asianIcon, name: 'Asian'}, {icon: breakfastIcon, name: 'Breakfast'}, {icon: burgerIcon, name: 'Burger'}, {icon: dessertIcon, name: 'Dessert'}, {icon: fastfoodIcon, name: 'Fast Food'}, {icon: healthyIcon, name: 'Healthy'}, {icon: iceCreamIcon, name: 'Ice Cream'}, {icon: indianIcon, name: 'Indian'}, {icon: italianIcon, name: 'Italian'}, {icon: koreanIcon, name: 'Korean'}, {icon: pizzaIcon, name: 'Pizza'}, {icon: seafoodIcon, name: 'Seafood'}, {icon: sushiIcon, name: 'Sushi'}, {icon: veganIcon, name: 'Vegan'}]
 
-    const [active, setActive] = React.useState('delivery')
-		const [cartIsOpen, setCartIsOpen] = React.useState(false)
-		const [visibleIconsRange, setVisibleIconsRange] = React.useState({start: 0, end: 5})
-		const [selectedFood, setSelectedFood] = React.useState('Asian')
+    const [active, setActive] = useState('delivery')
+		const [cartIsOpen, setCartIsOpen] = useState(false)
+		const [visibleIconsRange, setVisibleIconsRange] = useState({start: 0, end: 5})
+		const [selectedFood, setSelectedFood] = useState('Asian')
 
-		const visibleIcons = foodIcons.slice(visibleIconsRange.start, visibleIconsRange.end)
+		const visibleIcons = foods.slice(visibleIconsRange.start, visibleIconsRange.end)
+
 		const toggleCart = () => {
 			setCartIsOpen(cartIsOpen => !cartIsOpen)
 		}
@@ -37,12 +38,12 @@ export default function Navigation() {
 			if (visibleIconsRange.start > 0) {
 				setVisibleIconsRange({start: visibleIconsRange.start - 1, end: visibleIconsRange.end - 1})
 			} else {
-				setVisibleIconsRange({start: foodIcons.length - 1, end: foodIcons.length})
+				setVisibleIconsRange({start: 9, end: 14})
 			}
 		}
 
 		const showNextIcons = () => {
-			if (visibleIconsRange.end < foodIcons.length) {
+			if (visibleIconsRange.end < 14) {
 				setVisibleIconsRange({start: visibleIconsRange.start + 1, end: visibleIconsRange.end + 1})
 			} else {
 				setVisibleIconsRange({start: 0, end: 5})
@@ -50,8 +51,8 @@ export default function Navigation() {
 		}
 
     return (
-			<div className='flex flex-col justify-center mt-12 items-center h-44 w-[100%] bg-[#f3f6f7]'>
-				<nav className="flex justify-center items-center text-white"> 
+				<div className='flex flex-col justify-center mt-2 items-center h-44 w-[100%] bg-[#f3f6f7]'>
+					<nav className="flex justify-center items-center text-white"> 
 						<h2 className="absolute left-0 text-2xl font-bold ml-16 text-black">Foodie <span className="text-[#f9a826]">Go</span></h2>
 						<div className="flex justify-start gap-2 items-center bg-[#e3e7eb] px-2 py-1 rounded-full">
 								<div className={`rounded-full flex my-1 px-3 py-1 hover:cursor-pointer transition-all duration-300 ease-in-out transform ${active === 'delivery' ? 'bg-white scale-105 shadow-md' : 'bg-transparent'} hover:bg-white hover:shadow-lg`} 
@@ -80,38 +81,37 @@ export default function Navigation() {
 								<button className={`bg-[#f9a826] px-4 py-1 rounded-full text-white hover:bg-[#e5941d] hover:scale-105 shadow-md hover:shadow-lg transition-all duration-300 ease-in-out ${fonts.poppinsSemibold}`}> Sign In </button>
 								<button className={`bg-[#0eaa58] px-4 py-1 rounded-full text-white hover:bg-[#0b934a] hover:scale-105 shadow-md hover:shadow-lg transition-all duration-300 ease-in-out ${fonts.poppinsSemibold}`}> Create Account</button>
 						</div>
+					</nav>
 
-						
-				</nav>
-
-				<div className="flex justify-center items-center gap-4 mt-10">
-					<div className="flex justify-center items-center gap-4">
-						<span className="material-icons hover:cursor-pointer" onClick={showPrevIcons} style={{fontSize: '40px', rotate: '180deg'}}>arrow_right_alt</span>
+					<div className="flex justify-center items-center gap-10 mt-10">
+						<span className="material-icons hover:cursor-pointer" onClick={showPrevIcons} style={{ fontSize: '40px', rotate: '180deg' }}>arrow_right_alt</span>
 						{visibleIcons.map((icon, index) => (
-							<div className="flex flex-col justify-center items-center">
-								<Image key={index} src={icon} alt="food-icon" className="w-10 h-10 hover:cursor-pointer" onClick={() => setSelectedFood(foods[index])} />
-								<p className={`flex gap-1`}> 
-									{/* <span className="material-icons -mt-1"> check </span>  */}
-									{selectedFood === foods[index] && <span className="material-icons text-green-500"> check </span>}
-									<span className={`text-black text-sm ${fonts.poppinsRegular}`}> {foods[index]} </span> 
-								</p>
-							</div>
-
+							<figure key={index} className="flex flex-col justify-center items-center">
+								<Image src={icon.icon} alt="food-icon" className={`${selectedFood === icon.name ? 'scale-150' : ''} w-10 h-10 hover:cursor-pointer hover:scale-150`} onClick={() => setSelectedFood(icon.name)}/>
+								<figcaption className="flex items-center gap-1">
+									<span className={`size-4 ${selectedFood === icon.name ? 'visible' : 'invisible'} material-icons text-green-500`}>check</span>
+									<span className={`text-black text-sm ${fonts.poppinsRegular} mx-2 ${selectedFood === icon.name ? '' : '-ml-3'}`}> {icon.name} </span>
+								</figcaption>
+							</figure>
 						))}
-						<span className="material-icons hover:cursor-pointer" onClick={showNextIcons} style={{fontSize: '40px'}}>arrow_right_alt</span>
+						<span className="material-icons hover:cursor-pointer" onClick={showNextIcons} style={{ fontSize: '40px' }}>arrow_right_alt</span>
 					</div>
+
+
+					{cartIsOpen &&
+						<div className="mr-32 flex flex-col justify-start items-center absolute top-16 z-10 right-56 bg-white shadow-md w-[25%] h-64 rounded-lg">
+							<span className={`mt-10 material-icons text-black hover:text-green-500 transition-colors duration-300 ${fonts.poppinsSemibold}`}>shopping_cart</span>
+							<h3 className={`text-black font-extrabold mt-3 ml-2 ${fonts.poppinsRegular}`} style={{fontWeight: "bold"}}>Your Cart is Empty</h3>
+							<p className={`text-black mt-1 ml-2 ${fonts.poppinsRegular} text-center w-[75%]`}> Add items from a restaurant or store to start a new cart</p>
+							<button className={`bg-[#0eaa58] w-[80%] px-4 py-3 rounded-full text-white hover:bg-[#e5941d] hover:scale-105 shadow-md hover:shadow-lg transition-all duration-300 ease-in-out ${fonts.poppinsSemibold} mt-5`}> Start Shopping </button>
+						</div>
+					}
+				
+				{active === 'delivery' && <Filters />}
 				</div>
 
-		</div>
 
-		// {cartIsOpen &&
-		// 	<div className="mr-32 flex flex-col justify-start items-center absolute top-32 right-56 bg-white shadow-md w-[25%] h-64 rounded-lg">
-		// 		<span className={`mt-10 material-icons text-black hover:text-green-500 transition-colors duration-300 ${fonts.poppinsSemibold}`}>shopping_cart</span>
-		// 		<h3 className={`text-black font-extrabold mt-3 ml-2 ${fonts.poppinsRegular}`} style={{fontWeight: "bold"}}>Your Cart is Empty</h3>
-		// 		<p className={`text-black mt-1 ml-2 ${fonts.poppinsRegular} text-center w-[75%]`}> Add items from a restaurant or store to start a new cart</p>
-		// 		<button className={`bg-[#0eaa58] w-[80%] px-4 py-3 rounded-full text-white hover:bg-[#e5941d] hover:scale-105 shadow-md hover:shadow-lg transition-all duration-300 ease-in-out ${fonts.poppinsSemibold} mt-5`}> Start Shopping </button>
-		// 	</div>
-		// }
+		
 		
 		
     )
