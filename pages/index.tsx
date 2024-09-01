@@ -12,10 +12,9 @@ export default function Home() {
         <link rel="icon" href="/assets/icons/Pokedex-logo.svg" type="image/icon" />
     </Head>
 
-    <main className={`flex min-h-screen bg-[#f3f6f7] flex-col items-center justify-between`}> 
-      <Navigation />
-      {/* <Filters /> */}
-    </main>
+    <main className="flex bg-[#f3f6f7] min-h-screen flex-col items-center">
+        <Navigation />
+      </main>
     </>
   );
 

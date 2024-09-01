@@ -51,7 +51,7 @@ export default function Navigation() {
 		}
 
     return (
-				<div className='flex flex-col justify-center mt-2 items-center h-44 w-[100%] bg-[#f3f6f7]'>
+				<div className='flex flex-col justify-center mt-2 items-center w-[100%] bg-[#f3f6f7]'>
 					<nav className="flex justify-center items-center text-white"> 
 						<h2 className="absolute left-0 text-2xl font-bold ml-16 text-black">Foodie <span className="text-[#f9a826]">Go</span></h2>
 						<div className="flex justify-start gap-2 items-center bg-[#e3e7eb] px-2 py-1 rounded-full">
